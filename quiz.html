@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SKINZA | NVIDIA AI Analysis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body { background: linear-gradient(135deg, #070b14 0%, #0f172a 50%, #1e1b4b 100%); min-height: 100vh; font-family: sans-serif; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        
+        @keyframes slideIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        .option-btn { animation: slideIn 0.3s ease-out forwards; opacity: 0; }
+        
+        .big-btn { width: 100%; text-align: left; background: rgba(15, 23, 42, 0.8); border: 2px solid rgba(75, 85, 99, 0.4); padding: 1.25rem 1.5rem; border-radius: 1rem; font-size: 1.1rem; font-weight: 500; color: #f3f4f6; transition: all 0.2s ease; }
+        .big-btn:hover { background: rgba(88, 28, 135, 0.4); border-color: #c084fc; transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(168, 85, 247, 0.3); }
+        
+        /* Formatting inside the report */
+        #report-content strong { color: #fff; font-weight: 700; }
+        #report-content p { margin-bottom: 1rem; color: #d1d5db; }
+        #report-content a { color: #60a5fa; text-decoration: underline; }
+        #report-content a:hover { color: #93c5fd; }
+    </style>
+</head>
+<body class="text-white flex flex-col justify-between p-4 md:p-6 select-none">
+
+    <!-- Top Branding -->
+    <div class="w-full max-w-3xl mx-auto flex justify-between items-center my-4">
+        <h1 class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 tracking-widest uppercase cursor-pointer" onclick="window.location.href='index.html'">SKINZA</h1>
+        <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-green-500/40 bg-green-500/10 text-green-400 text-[10px] sm:text-xs font-bold tracking-widest uppercase shadow-[0_0_10px_rgba(34,197,94,0.1)]">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zm0 7.5l-10-5v10l10 5 10-5v-10l-10 5z"/></svg>
+            NVIDIA AI Powered
+        </div>
+    </div>
+
+    <!-- MAIN INTERACTIVE BOX -->
+    <div id="quiz-box" class="glass max-w-3xl w-full mx-auto p-6 md:p-10 rounded-3xl shadow-[0_0_40px_rgba(168,85,247,0.1)] my-auto transition-all duration-300 border-t border-t-purple-500/30">
+        
+        <div id="progress-wrapper" class="w-full bg-slate-800/80 h-2.5 rounded-full mb-8 hidden shadow-inner overflow-hidden">
+            <div id="progress" class="bg-gradient-to-r from-purple-500 to-pink-500 h-2.5 rounded-full transition-all duration-500 shadow-[0_0_10px_rgba(236,72,153,0.5)]" style="width: 0%"></div>
+        </div>
+
+        <!-- STEP 0: USER PROFILE SETUP -->
+        <div id="profile-setup" class="space-y-6">
+            <h2 class="text-2xl font-bold text-white border-b border-gray-800 pb-4 flex items-center gap-2">
+                <span>👋</span> Let's configure your AI Profile
+            </h2>
+            <div class="group">
+                <label class="block text-xs uppercase tracking-widest text-purple-300 font-bold mb-2">What is your Name?</label>
+                <input id="user-name" type="text" class="w-full bg-slate-900/80 border-2 border-gray-700 rounded-xl p-4 text-lg text-white focus:outline-none focus:border-purple-500 transition shadow-inner" placeholder="Enter your full name...">
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="group">
+                    <label class="block text-xs uppercase tracking-widest text-purple-300 font-bold mb-2">Age Bracket</label>
+                    <select id="user-age" class="w-full bg-slate-900/80 border-2 border-gray-700 rounded-xl p-4 text-lg text-white focus:outline-none focus:border-purple-500 transition shadow-inner">
+                        <option value="Under 18">Under 18</option>
+                        <option value="18-25">18-25</option>
+                        <option value="26-35">26-35</option>
+                        <option value="36-50">36-50</option>
+                        <option value="50+">50+</option>
+                    </select>
+                </div>
+                <div class="group">
+                    <label class="block text-xs uppercase tracking-widest text-purple-300 font-bold mb-2">Gender</label>
+                    <select id="user-gender" class="w-full bg-slate-900/80 border-2 border-gray-700 rounded-xl p-4 text-lg text-white focus:outline-none focus:border-purple-500 transition shadow-inner">
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Non-Binary">Non-Binary</option>
+                    </select>
+                </div>
+            </div>
+            <button id="start-quiz-btn" class="w-full mt-6 bg-gradient-to-r from-purple-600 to-pink-600 font-bold py-5 rounded-xl text-lg shadow-[0_10px_20px_rgba(236,72,153,0.3)] hover:scale-[1.02] transition-all duration-200">Start Diagnostics 🚀</button>
+        </div>
+
+        <!-- CORE QUIZ PANEL -->
+        <div id="quiz-panel" class="hidden">
+            <div class="flex justify-between items-center mb-2">
+                <p id="q-num" class="text-sm text-purple-400 font-extrabold uppercase tracking-widest">Question 1 of 10</p>
+            </div>
+            <h2 id="q-text" class="text-2xl md:text-3xl font-bold mt-2 mb-8 text-white leading-tight">What is your primary skin concern?</h2>
+            
+            <div id="options-div" class="grid grid-cols-1 gap-4"></div>
+
+            <div id="text-input-div" class="hidden">
+                <textarea id="custom-text" class="w-full bg-slate-900/80 border-2 border-gray-700 rounded-xl p-5 text-lg text-white focus:outline-none focus:border-purple-500 transition shadow-inner" rows="4" placeholder="Describe any specific allergies, diets, or products you use currently..."></textarea>
+                <button id="submit-btn" class="w-full mt-6 bg-gradient-to-r from-green-500 to-emerald-600 font-bold text-xl py-5 rounded-xl shadow-[0_10px_20px_rgba(34,197,94,0.3)] hover:scale-[1.02] transition-all duration-200">Generate Clinical Report ⚡</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOADING SCREEN -->
+    <div id="loading-box" class="hidden text-center my-auto space-y-6">
+        <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-green-500 mx-auto"></div>
+        <div>
+            <h2 class="text-2xl md:text-3xl font-bold text-green-400 animate-pulse tracking-wide">NVIDIA Inference Active...</h2>
+            <p class="text-base text-gray-400 mt-3">Processing cellular profile against millions of clinical data points.</p>
+        </div>
+    </div>
+
+    <!-- REPORT VIEW -->
+    <div id="report-box" class="hidden glass max-w-4xl w-full mx-auto p-6 md:p-10 rounded-3xl shadow-[0_0_40px_rgba(34,197,94,0.1)] my-auto border-t border-t-green-500/30">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-gray-800 pb-6 mb-8 gap-4">
+            <div>
+                <h2 id="welcome-title" class="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-500">Hi User!</h2>
+                <p class="text-gray-400 text-sm mt-2 uppercase tracking-widest font-bold">SKINZA Official Analytics Dashboard</p>
+            </div>
+            <button onclick="window.print()" class="bg-slate-800 border-2 border-slate-600 hover:bg-slate-700 hover:border-slate-400 text-white text-base px-8 py-3 rounded-xl font-bold shadow-lg transition duration-200 flex items-center gap-2">
+                📥 Save PDF
+            </button>
+        </div>
+        
+        <!-- Generated Report Will Load Here -->
+        <div id="report-content" class="text-gray-300 space-y-4 text-base md:text-lg leading-relaxed tracking-wide"></div>
+        
+        <div class="mt-12 text-center border-t border-gray-800 pt-6">
+            <button onclick="window.location.reload()" class="text-purple-400 hover:text-pink-400 font-bold uppercase tracking-widest text-sm transition">🔄 Run Another Scan</button>
+        </div>
+    </div>
+
+    <script>
+        const firstOptions = ["🔴 Acne & Breakouts", "🌑 Pigmentation & Dark Spots", "⏳ Aging & Fine Lines", "🏜️ Dryness & Flaking", "✨ Others (Custom Problem)"];
+        
+        const questionTree = {
+            "🔴 Acne & Breakouts": {
+                q2: { text: "What type of breakouts do you mostly see?", options: ["Deep, painful bumps (Cystic)", "Whiteheads / Blackheads", "Small red bumps", "Heat bumps / Rash"] },
+                q3: { text: "Where do these breakouts appear most often?", options: ["Jawline and Chin", "Cheeks", "Forehead and Nose (T-Zone)", "All over random areas"] },
+                q4: { text: "How does your skin feel midday?", options: ["Extremely oily everywhere", "Oily only on T-Zone", "Dry and tight", "Normal"] }
+            },
+            "🌑 Pigmentation & Dark Spots": {
+                q2: { text: "What does the pigmentation look like?", options: ["Large patches on cheeks/forehead", "Small scattered dark spots", "Dark marks left over from old acne", "Uneven skin tone overall"] },
+                q3: { text: "When do these marks seem to get darker?", options: ["After any sun exposure", "During hormonal changes", "Stays consistent all the time", "After picking or scratching skin"] },
+                q4: { text: "What is your current sunscreen habit?", options: ["I rarely wear sunscreen", "Only when going out in heavy sun", "Apply once in the morning daily", "Apply daily and reapply consistently"] }
+            },
+            "⏳ Aging & Fine Lines": {
+                q2: { text: "Where are fine lines or wrinkles most visible?", options: ["Around the eyes (Crow's feet)", "Smile lines / Laugh lines", "On the forehead", "Skin feels sagging / Loss of firmness"] },
+                q3: { text: "Describe your current skin texture:", options: ["Rough and dull surface", "Thin and paper-like", "Oily but losing elasticity", "Relatively smooth"] },
+                q4: { text: "What environmental factor impacts you most?", options: ["Heavy sun exposure", "Air conditioned / Dry indoor air", "High stress and lack of sleep", "Urban pollution"] }
+            },
+            "🏜️ Dryness & Flaking": {
+                q2: { text: "How does your skin feel right after washing?", options: ["Stretching, burning, or itchy", "Very tight and uncomfortable", "Flaky within minutes", "Calm briefly, then dry later"] },
+                q3: { text: "Do you notice any redness on your face?", options: ["Constant redness and irritation", "Rough patches but no redness", "Both red patches and flaking", "No redness, just dry skin"] },
+                q4: { text: "How does your skin react to moisturizers?", options: ["Stings or burns upon application", "Absorbs immediately and feels dry again", "Sits on top like an oily layer", "Soothes nicely and feels good"] }
+            },
+            "✨ Others (Custom Problem)": {
+                q2: { text: "What basic character defines this problem best?", options: ["Sudden skin rashes or allergies", "Open pores and blackheads texture", "Extreme skin dullness and fatigue", "Unsure, random reactions"] },
+                q3: { text: "How long have you been dealing with this?", options: ["Just a few days/weeks", "A couple of months", "For multiple years off and on", "Since childhood"] },
+                q4: { text: "Does it itch, hurt, or burn?", options: ["Yes, constantly hurts or burns", "Itches occasionally", "No pain or itchiness, just looks bad", "Triggers only after cosmetics"] }
+            }
+        };
+
+        const commonQuestions = [
+            { text: "How sensitive is your skin to new cosmetics?", options: ["Highly sensitive / Reactive", "Mildly sensitive", "Rarely reacts negatively", "Never had an issue"] },
+            { text: "Describe your daily water intake and diet profile:", options: ["High water & balanced healthy diet", "Low water, high sugar / dairy", "High caffeine / processed foods", "Average hydration, mixed diet"] },
+            { text: "What is your current daily skincare routine?", options: ["Nothing, just water or simple soap", "Basic Cleanser and Moisturizer", "Complex multi-step serum routine", "Using heavily medicated treatments"] },
+            { text: "What type of climate do you live in?", options: ["Hot and humid", "Dry and hot conditions", "Cold and windy", "Moderate / Temperate seasonal"] },
+            { text: "What is your primary expectation from SKINZA?", options: ["Clear active issues quickly", "Fade dark marks and boost brightness", "Build an advanced scientific routine", "Repair a damaged cellular barrier"] }
+        ];
+
+        let step = 1; let userMainConcern = ""; let answersLog = [];
+        let pName = "Guest", pAge = "20", pGender = "Male";
+
+        document.getElementById("start-quiz-btn").onclick = function() {
+            const typedName = document.getElementById("user-name").value.trim();
+            if(typedName) pName = typedName;
+            pAge = document.getElementById("user-age").value;
+            pGender = document.getElementById("user-gender").value;
+
+            document.getElementById("profile-setup").classList.add("hidden");
+            document.getElementById("progress-wrapper").classList.remove("hidden");
+            document.getElementById("quiz-panel").classList.remove("hidden");
+            loadQuestion();
+        };
+
+        function loadQuestion() {
+            document.getElementById("progress").style.width = `${(step / 10) * 100}%`;
+            document.getElementById("q-num").innerText = `Question ${step} of 10`;
+            const optionsDiv = document.getElementById("options-div");
+            optionsDiv.innerHTML = "";
+
+            if (step === 1) {
+                document.getElementById("q-text").innerText = "What is your primary skin concern?";
+                firstOptions.forEach((opt, index) => makeButton(opt, index));
+            } else if (step >= 2 && step <= 4) {
+                const currentQ = questionTree[userMainConcern][`q${step}`];
+                document.getElementById("q-text").innerText = currentQ.text;
+                currentQ.options.forEach((opt, index) => makeButton(opt, index));
+            } else if (step >= 5 && step <= 9) {
+                const currentQ = commonQuestions[step - 5];
+                document.getElementById("q-text").innerText = currentQ.text;
+                currentQ.options.forEach((opt, index) => makeButton(opt, index));
+            } else if (step === 10) {
+                document.getElementById("q-text").innerText = "Any final details for the NVIDIA AI to consider?";
+                optionsDiv.classList.add("hidden");
+                document.getElementById("text-input-div").classList.remove("hidden");
+            }
+        }
+
+        function makeButton(text, index) {
+            const btn = document.createElement("button");
+            btn.className = "option-btn big-btn";
+            btn.style.animationDelay = `${index * 0.1}s`; 
+            btn.innerText = text;
+            btn.onclick = () => {
+                if (step === 1) userMainConcern = text;
+                answersLog.push(`Q: ${document.getElementById("q-text").innerText} | A: ${text}`);
+                step++;
+                loadQuestion();
+            };
+            document.getElementById("options-div").appendChild(btn);
+        }
+
+        document.getElementById("submit-btn").onclick = async function() {
+            const extraDetails = document.getElementById("custom-text").value || "None";
+            let finalAnswers = [userMainConcern, ...answersLog.map(a => a.split(" | A: ")[1]), extraDetails];
+
+            document.getElementById("quiz-box").classList.add("hidden");
+            document.getElementById("loading-box").classList.remove("hidden");
+
+            try {
+                const response = await fetch("/api/analyze", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ 
+                        name: pName, age: pAge, gender: pGender, answers: finalAnswers 
+                    })
+                });
+                const data = await response.json();
+                showReport(data.report);
+            } catch (err) {
+                showReport("## **Connection Error**\n🔴 Failed to connect to NVIDIA cluster. Ensure local server is running.");
+            }
+        };
+
+        // SUPER-PARSER FOR GLOWING DOTS, SECTIONS, AND GLOWING GREEN PRODUCTS
+        function showReport(markdown) {
+            document.getElementById("loading-box").classList.add("hidden");
+            document.getElementById("report-box").classList.remove("hidden");
+            
+            document.getElementById("welcome-title").innerText = `Report Ready, ${pName}! ✨`;
+
+            let cleanHtml = markdown
+                // Main Bold Headings
+                .replace(/## \*\*([^*]+)\*\*/g, '<h2 class="text-2xl md:text-3xl font-extrabold text-white border-b-2 border-gray-700 pb-3 mt-12 mb-6 tracking-wide flex items-center gap-3"><span class="text-purple-400">⚡</span> $1</h2>')
+                // Fallback for normal Headings
+                .replace(/## ([^\n]+)/g, '<h2 class="text-2xl md:text-3xl font-extrabold text-white border-b-2 border-gray-700 pb-3 mt-12 mb-6 tracking-wide flex items-center gap-3"><span class="text-purple-400">⚡</span> $1</h2>')
+                // 🔥 THE NEW GREEN PRODUCT HIGHLIGHTER 🔥
+                .replace(/\[PRODUCT\](.*?)\[\/PRODUCT\]/g, '<strong class="text-green-400 font-extrabold text-xl tracking-wide drop-shadow-[0_0_8px_rgba(34,197,94,0.4)]">$1</strong>')
+                // Bold text
+                .replace(/\*\*([^*]+)\*\*/g, '<strong class="text-white font-bold">$1</strong>')
+                // Lists (Green DOs, Red DONTs, Normal)
+                .replace(/(?:^|\n)(🟢|🔴|-)\s*(.*)/g, function(match, bullet, text) {
+                    let bgClass = "";
+                    let icon = bullet;
+                    if (bullet === '🟢') {
+                        bgClass = "bg-green-900/20 border-green-500/30 text-green-100 shadow-[0_4px_15px_rgba(34,197,94,0.05)]";
+                    } else if (bullet === '🔴') {
+                        bgClass = "bg-red-900/20 border-red-500/30 text-red-100 shadow-[0_4px_15px_rgba(239,68,68,0.05)]";
+                    } else {
+                        bgClass = "bg-slate-900/40 border-slate-700/50 text-gray-300";
+                        icon = "🔹";
+                    }
+                    return `<div class="py-4 px-5 flex items-start gap-4 border mb-3 rounded-xl transition text-base md:text-lg ${bgClass}"><span class="text-xl leading-none mt-0.5">${icon}</span><span class="leading-relaxed">${text}</span></div>`;
+                });
+            
+            document.getElementById("report-content").innerHTML = cleanHtml;
+
+            // NVIDIA GREEN CONFETTI BLAST
+            var count = 300;
+            var defaults = { origin: { y: 0.6 }, colors: ['#22c55e', '#a855f7', '#ec4899', '#ffffff'] };
+            function fire(particleRatio, opts) {
+                confetti(Object.assign({}, defaults, opts, { particleCount: Math.floor(count * particleRatio) }));
+            }
+            fire(0.25, { spread: 26, startVelocity: 55 });
+            fire(0.2, { spread: 60 });
+            fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+            fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+            fire(0.1, { spread: 120, startVelocity: 45 });
+        }
+    </script>
+</body>
+</html>
