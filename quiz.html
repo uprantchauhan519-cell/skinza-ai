@@ -20,7 +20,6 @@
         h1 { font-size: 32px; font-weight: 800; background: linear-gradient(135deg, #00ff80, #8a2be2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; margin-bottom: 5px; }
         p.subtitle { color: #a0a0c0; text-align: center; font-size: 15px; margin-bottom: 35px; }
 
-        /* Stepper UI Styles */
         .step { display: none; animation: slideIn 0.4s ease forwards; }
         .step.active { display: block; }
         @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
@@ -62,7 +61,7 @@
         .report-section h3 { color: #fff; font-size: 18px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
         .report-content { color: #d1d1f0; font-size: 15px; line-height: 1.6; white-space: pre-line; }
 
-        /* Enhanced Carousel Styles with Image Fallback Support */
+        /* REAL IMAGE CAROUSEL STYLES */
         .product-carousel { display: flex; overflow-x: auto; gap: 16px; padding: 10px 5px 20px 5px; scroll-snap-type: x mandatory; scrollbar-width: none; }
         .product-carousel::-webkit-scrollbar { display: none; }
         .product-card { flex: 0 0 220px; scroll-snap-align: start; background: #1e1e35; border: 1px solid rgba(0, 255, 128, 0.1); border-radius: 18px; padding: 16px; text-align: center; position: relative; display: flex; flex-direction: column; justify-content: space-between;}
@@ -182,7 +181,7 @@
     <div id="loading-overlay">
         <div class="spinner"></div>
         <h3 style="color: #00ff80;">Running AI Diagnostics Engine...</h3>
-        <p style="color: #a0a0c0; margin-top: 10px;" id="loading-msg">Analyzing specific issues & querying D2C database...</p>
+        <p style="color: #a0a0c0; margin-top: 10px;" id="loading-msg">Extracting real images & Official search links...</p>
     </div>
 
     <div id="result-wrapper">
@@ -207,8 +206,8 @@
         </div>
 
         <div class="report-section" style="border-left-color: #00ff80; background: #132020;">
-            <h3 style="color:#00ff80;">🛒 Official Brand Recommendations</h3>
-            <p style="color: #a0a0c0; font-size: 13px; margin-bottom: 15px;">Swipe right to explore 10 verified variations sourced directly from official brand stores in India. Links are 100% safe and direct.</p>
+            <h3 style="color:#00ff80;">🛒 Official Brand Search Matches</h3>
+            <p style="color: #a0a0c0; font-size: 13px; margin-bottom: 15px;">We have redirected these links to the brand's official search engine. Pick the exact variation you prefer!</p>
             <div id="recommendations-output"></div>
         </div>
 
@@ -249,67 +248,43 @@
         nextStep(stepIndex);
     }
 
-    // 🛍️ 100% VERIFIED D2C DATABASE (10 Products/Category) with Real CDN Images & Smart Fallbacks
+    // 🛍️ 100% PROXY BYPASS IMAGES + OFFICIAL SEARCH LINKS (Bulletproof Solution)
     const productDatabase = {
         oily: [
-            { type: "Cleanser", name: "Minimalist 2% Salicylic Acid Face Wash", price: "₹299", rating: "4.6 ★", image: "https://m.media-amazon.com/images/I/61Nux8vGbdL._SL1500_.jpg", link: "https://beminimalist.co/products/salicylic-acid-2-face-wash" },
-            { type: "Cleanser", name: "The Derma Co 1% Salicylic Acid Gel Wash", price: "₹299", rating: "4.4 ★", image: "https://m.media-amazon.com/images/I/51Hk+Btc6CL._SL1200_.jpg", link: "https://thedermaco.com/product/1-salicylic-acid-gel-face-wash-with-salicylic-acid-witch-hazel-for-active-acne-100-ml" },
-            { type: "Toner", name: "Plum Green Tea Alcohol-Free Toner", price: "₹390", rating: "4.5 ★", image: "https://m.media-amazon.com/images/I/51X-vP6Yd4L._SL1500_.jpg", link: "https://plumgoodness.com/products/green-tea-alcohol-free-toner" },
-            { type: "Serum", name: "The Derma Co 10% Niacinamide Serum", price: "₹599", rating: "4.6 ★", image: "https://m.media-amazon.com/images/I/51BqjUeQGSL._SL1200_.jpg", link: "https://thedermaco.com/products/10-percent-niacinamide-serum" },
-            { type: "Moisturizer", name: "Dot & Key 72Hr Probiotics Gel", price: "₹495", rating: "4.5 ★", image: "https://m.media-amazon.com/images/I/51j1y4L2q4L._SL1500_.jpg", link: "https://www.dotandkey.com/products/72-hr-hydrating-gel-moisturizer-with-probiotics" },
-            { type: "Sunscreen", name: "Re'equil Ultra Matte Dry Touch Sunscreen", price: "₹780", rating: "4.7 ★", image: "https://m.media-amazon.com/images/I/51JvX7o7b3L._SL1000_.jpg", link: "https://www.reequil.com/products/ultra-matte-dry-touch-sunscreen-gel-spf-50-pa-uva" },
-            { type: "Sunscreen", name: "Aqualogica Glow+ Dewy Sunscreen", price: "₹399", rating: "4.6 ★", image: "https://m.media-amazon.com/images/I/51KzN+XhC+L._SL1500_.jpg", link: "https://aqualogica.in/product/glow-dewy-sunscreen-with-papaya-vitamin-c-50g" },
-            { type: "Cleanser", name: "Dr. Sheth's Neem & Salicylic Face Wash", price: "₹349", rating: "4.3 ★", image: "https://m.media-amazon.com/images/I/51wXkY7f1HL._SL1500_.jpg", link: "https://www.drsheths.com/products/neem-salicylic-acid-face-wash" },
-            { type: "Moisturizer", name: "Minimalist 10% Vitamin B5 Moisturizer", price: "₹349", rating: "4.5 ★", image: "https://m.media-amazon.com/images/I/51J6H0Xb7SL._SL1500_.jpg", link: "https://beminimalist.co/products/vitamin-b5-10-moisturizer" },
-            { type: "Toner", name: "Minimalist PHA 3% Alcohol Free Face Toner", price: "₹399", rating: "4.4 ★", image: "https://m.media-amazon.com/images/I/61rRk9B+H9S._SL1500_.jpg", link: "https://beminimalist.co/products/pha-3-biotik-3-toner" }
+            { type: "Cleanser", name: "Minimalist 2% Salicylic Face Wash", price: "₹299", rating: "4.6 ★", image: "https://wsrv.nl/?url=m.media-amazon.com/images/I/61Nux8vGbdL._SL1000_.jpg", link: "https://beminimalist.co/search?q=Salicylic+Acid+Face+Wash" },
+            { type: "Serum", name: "The Derma Co 10% Niacinamide", price: "₹599", rating: "4.6 ★", image: "https://wsrv.nl/?url=m.media-amazon.com/images/I/51BqjUeQGSL._SL1000_.jpg", link: "https://thedermaco.com/search?q=Niacinamide+Serum" },
+            { type: "Toner", name: "Plum Green Tea Toner", price: "₹390", rating: "4.5 ★", image: "https://wsrv.nl/?url=m.media-amazon.com/images/I/51X-vP6Yd4L._SL1000_.jpg", link: "https://plumgoodness.com/search?q=Green+Tea+Toner" },
+            { type: "Moisturizer", name: "Dot & Key 72Hr Probiotics Gel", price: "₹495", rating: "4.5 ★", image: "https://wsrv.nl/?url=m.media-amazon.com/images/I/51j1y4L2q4L._SL1000_.jpg", link: "https://www.dotandkey.com/search?q=72+Hr+Probiotics+Gel" },
+            { type: "Sunscreen", name: "Re'equil Matte Sunscreen", price: "₹780", rating: "4.7 ★", image: "https://wsrv.nl/?url=m.media-amazon.com/images/I/51JvX7o7b3L._SL1000_.jpg", link: "https://www.reequil.com/search?q=Ultra+Matte+Sunscreen" },
+            { type: "Sunscreen", name: "Aqualogica Glow+ Sunscreen", price: "₹399", rating: "4.6 ★", image: "https://wsrv.nl/?url=m.media-amazon.com/images/I/51KzN+XhC+L._SL1000_.jpg", link: "https://aqualogica.in/search?q=Glow+Dewy+Sunscreen" }
         ],
         dry: [
-            { type: "Cleanser", name: "Minimalist 5% Aquaporin Cleanser", price: "₹299", rating: "4.6 ★", image: "https://m.media-amazon.com/images/I/51M3v0b9B5L._SL1500_.jpg", link: "https://beminimalist.co/products/aquaporin-booster-05-cleanser" },
-            { type: "Serum", name: "Minimalist 2% Hyaluronic Acid Serum", price: "₹599", rating: "4.7 ★", image: "https://m.media-amazon.com/images/I/51vGf7XbJkL._SL1500_.jpg", link: "https://beminimalist.co/products/hyaluronic-acid-2-b5" },
-            { type: "Serum", name: "The Derma Co 2% Hyaluronic Acid Serum", price: "₹599", rating: "4.5 ★", image: "https://m.media-amazon.com/images/I/51CjW5o7-yL._SL1200_.jpg", link: "https://thedermaco.com/products/2-hyaluronic-acid-face-serum" },
-            { type: "Moisturizer", name: "Dot & Key Ceramides Moisturizer", price: "₹395", rating: "4.6 ★", image: "https://m.media-amazon.com/images/I/51D6B+E1a6L._SL1500_.jpg", link: "https://www.dotandkey.com/products/ceramide-hyaluronic-skin-barrier-repair-face-cream" },
-            { type: "Moisturizer", name: "Plum E-Luminence Deep Moisturizing Cream", price: "₹575", rating: "4.5 ★", image: "https://m.media-amazon.com/images/I/61+Q3KzR79L._SL1500_.jpg", link: "https://plumgoodness.com/products/e-luminence-deep-moisturizing-creme" },
-            { type: "Moisturizer", name: "Re'equil Ceramide & Hyaluronic Acid Moisturizer", price: "₹395", rating: "4.7 ★", image: "https://m.media-amazon.com/images/I/51r9LpZqF2L._SL1000_.jpg", link: "https://www.reequil.com/products/ceramide-hyaluronic-acid-moisturiser-for-dry-skin" },
-            { type: "Cleanser", name: "Cetaphil Gentle Skin Cleanser", price: "₹333", rating: "4.8 ★", image: "https://m.media-amazon.com/images/I/61+M+8a+x3L._SL1500_.jpg", link: "https://www.cetaphil.in/product/cetaphil-gentle-skin-cleanser" },
-            { type: "Sunscreen", name: "The Derma Co 1% Hyaluronic Sunscreen Aqua Gel", price: "₹499", rating: "4.8 ★", image: "https://m.media-amazon.com/images/I/51P+2M3gE-L._SL1200_.jpg", link: "https://thedermaco.com/products/1-hyaluronic-sunscreen-aqua-gel" },
-            { type: "Sunscreen", name: "Aqualogica Hydrate+ Dewy Sunscreen", price: "₹399", rating: "4.5 ★", image: "https://m.media-amazon.com/images/I/51w7YqZc2KL._SL1500_.jpg", link: "https://aqualogica.in/product/hydrate-dewy-sunscreen-with-coconut-water-hyaluronic-acid-50g" },
-            { type: "Sunscreen", name: "Dr. Sheth's Haldi & Hyaluronic Acid Sunscreen", price: "₹499", rating: "4.6 ★", image: "https://m.media-amazon.com/images/I/51YJ6nZ29XL._SL1500_.jpg", link: "https://www.drsheths.com/products/haldi-hyaluronic-acid-sunscreen" }
+            { type: "Cleanser", name: "Cetaphil Gentle Cleanser", price: "₹333", rating: "4.8 ★", image: "https://wsrv.nl/?url=m.media-amazon.com/images/I/61+M+8a+x3L._SL1000_.jpg", link: "https://www.nykaa.com/search/result/?q=Cetaphil+Gentle+Skin+Cleanser" },
+            { type: "Serum", name: "Minimalist 2% Hyaluronic", price: "₹599", rating: "4.7 ★", image: "https://wsrv.nl/?url=m.media-amazon.com/images/I/51vGf7XbJkL._SL1000_.jpg", link: "https://beminimalist.co/search?q=Hyaluronic+Acid" },
+            { type: "Moisturizer", name: "Dot & Key Ceramides Cream", price: "₹395", rating: "4.6 ★", image: "https://wsrv.nl/?url=m.media-amazon.com/images/I/51D6B+E1a6L._SL1000_.jpg", link: "https://www.dotandkey.com/search?q=Ceramide+Moisturizer" },
+            { type: "Moisturizer", name: "Plum E-Luminence Cream", price: "₹575", rating: "4.5 ★", image: "https://wsrv.nl/?url=m.media-amazon.com/images/I/61+Q3KzR79L._SL1000_.jpg", link: "https://plumgoodness.com/search?q=E-Luminence+Cream" },
+            { type: "Sunscreen", name: "Derma Co 1% Hyaluronic Sunscreen", price: "₹499", rating: "4.8 ★", image: "https://wsrv.nl/?url=m.media-amazon.com/images/I/51P+2M3gE-L._SL1000_.jpg", link: "https://thedermaco.com/search?q=Hyaluronic+Sunscreen" }
         ],
         acne: [
-            { type: "Cleanser", name: "Minimalist 2% Salicylic Acid Face Wash", price: "₹299", rating: "4.6 ★", image: "https://m.media-amazon.com/images/I/61Nux8vGbdL._SL1500_.jpg", link: "https://beminimalist.co/products/salicylic-acid-2-face-wash" },
-            { type: "Cleanser", name: "The Derma Co 1% Salicylic Acid Gel Wash", price: "₹299", rating: "4.5 ★", image: "https://m.media-amazon.com/images/I/51Hk+Btc6CL._SL1200_.jpg", link: "https://thedermaco.com/product/1-salicylic-acid-gel-face-wash-with-salicylic-acid-witch-hazel-for-active-acne-100-ml" },
-            { type: "Serum", name: "Minimalist 2% Salicylic Acid Serum", price: "₹549", rating: "4.7 ★", image: "https://m.media-amazon.com/images/I/51D6+D2wV4L._SL1500_.jpg", link: "https://beminimalist.co/products/salicylic-acid-2" },
-            { type: "Serum", name: "The Derma Co 2% Salicylic Acid Serum", price: "₹499", rating: "4.4 ★", image: "https://m.media-amazon.com/images/I/51R8FkL+hFL._SL1200_.jpg", link: "https://thedermaco.com/products/2-salicylic-acid-serum-for-active-acne" },
-            { type: "Moisturizer", name: "Plum Green Tea Renewed Clarity Night Gel", price: "₹575", rating: "4.6 ★", image: "https://m.media-amazon.com/images/I/51K+uN0dJ6L._SL1500_.jpg", link: "https://plumgoodness.com/products/green-tea-renewed-clarity-night-gel" },
-            { type: "Treatment", name: "Re'equil Acne Clarifying Gel", price: "₹550", rating: "4.5 ★", image: "https://m.media-amazon.com/images/I/51xP+kY4kLL._SL1000_.jpg", link: "https://www.reequil.com/products/acne-clarifying-gel" },
-            { type: "Treatment", name: "Dot & Key Cica Blemish Clearing Gel", price: "₹495", rating: "4.4 ★", image: "https://m.media-amazon.com/images/I/51Y7WjK-Y-L._SL1500_.jpg", link: "https://www.dotandkey.com/products/cica-calming-blemish-clearing-dark-spot-gel" },
-            { type: "Treatment", name: "Plum Green Tea Clear Spot-Light Blemish Gel", price: "₹475", rating: "4.5 ★", image: "https://m.media-amazon.com/images/I/51G+yC2sK1L._SL1500_.jpg", link: "https://plumgoodness.com/products/green-tea-clear-spot-light-blemish-gel" },
-            { type: "Sunscreen", name: "Aqualogica Clear+ Sunscreen", price: "₹399", rating: "4.6 ★", image: "https://m.media-amazon.com/images/I/51y1Y3E5yPL._SL1500_.jpg", link: "https://aqualogica.in/product/clear-jello-sunscreen-with-green-tea-salicylic-acid-50g" },
-            { type: "Cleanser", name: "Dr. Sheth's Neem & Salicylic Acid Face Wash", price: "₹349", rating: "4.3 ★", image: "https://m.media-amazon.com/images/I/51wXkY7f1HL._SL1500_.jpg", link: "https://www.drsheths.com/products/neem-salicylic-acid-face-wash" }
+            { type: "Cleanser", name: "Derma Co Salicylic Wash", price: "₹299", rating: "4.5 ★", image: "https://wsrv.nl/?url=m.media-amazon.com/images/I/51Hk+Btc6CL._SL1000_.jpg", link: "https://thedermaco.com/search?q=Salicylic+Acid+Face+Wash" },
+            { type: "Serum", name: "Minimalist Salicylic Serum", price: "₹549", rating: "4.7 ★", image: "https://wsrv.nl/?url=m.media-amazon.com/images/I/51D6+D2wV4L._SL1000_.jpg", link: "https://beminimalist.co/search?q=Salicylic+Acid+Serum" },
+            { type: "Moisturizer", name: "Plum Green Tea Night Gel", price: "₹575", rating: "4.6 ★", image: "https://wsrv.nl/?url=m.media-amazon.com/images/I/51K+uN0dJ6L._SL1000_.jpg", link: "https://plumgoodness.com/search?q=Green+Tea+Night+Gel" },
+            { type: "Treatment", name: "Dot & Key Cica Blemish Gel", price: "₹495", rating: "4.4 ★", image: "https://wsrv.nl/?url=m.media-amazon.com/images/I/51Y7WjK-Y-L._SL1000_.jpg", link: "https://www.dotandkey.com/search?q=Cica+Blemish+Gel" },
+            { type: "Sunscreen", name: "Aqualogica Clear+ Sunscreen", price: "₹399", rating: "4.6 ★", image: "https://wsrv.nl/?url=m.media-amazon.com/images/I/51y1Y3E5yPL._SL1000_.jpg", link: "https://aqualogica.in/search?q=Clear+Jello+Sunscreen" }
         ],
         pigmentation: [
-            { type: "Serum", name: "Minimalist 2% Alpha Arbutin", price: "₹549", rating: "4.7 ★", image: "https://m.media-amazon.com/images/I/61gR5D8F0GL._SL1500_.jpg", link: "https://beminimalist.co/products/alpha-arbutin-2-hyaluronic-acid-1" },
-            { type: "Cream", name: "The Derma Co 2% Kojic Acid Cream", price: "₹499", rating: "4.5 ★", image: "https://m.media-amazon.com/images/I/51V+z2O1qSL._SL1200_.jpg", link: "https://thedermaco.com/products/2-kojic-acid-face-cream" },
-            { type: "Serum", name: "Plum 15% Vitamin C Serum", price: "₹790", rating: "4.4 ★", image: "https://m.media-amazon.com/images/I/51p4R+G3kVL._SL1500_.jpg", link: "https://plumgoodness.com/products/15-vitamin-c-face-serum-with-mandarin" },
-            { type: "Sunscreen", name: "Dot & Key Vitamin C + E Sunscreen", price: "₹495", rating: "4.5 ★", image: "https://m.media-amazon.com/images/I/51E-R2x3XyL._SL1500_.jpg", link: "https://www.dotandkey.com/products/vitamin-c-e-super-bright-sunscreen-spf-50" },
-            { type: "Cream", name: "Re'equil Skin Radiance Cream", price: "₹495", rating: "4.3 ★", image: "https://m.media-amazon.com/images/I/61r5rO5P5+L._SL1000_.jpg", link: "https://www.reequil.com/products/skin-radiance-cream" },
-            { type: "Cleanser", name: "Dr. Sheth's Amla & VC Vitamin C Wash", price: "₹349", rating: "4.4 ★", image: "https://m.media-amazon.com/images/I/51DkX7D8qBL._SL1500_.jpg", link: "https://www.drsheths.com/products/amla-vc-vitamin-c-face-wash" },
-            { type: "Sunscreen", name: "Aqualogica Radiance+ Dewy Sunscreen", price: "₹399", rating: "4.6 ★", image: "https://m.media-amazon.com/images/I/51T9NnZ-5yL._SL1500_.jpg", link: "https://aqualogica.in/product/radiance-dewy-sunscreen-with-watermelon-niacinamide-50g" },
-            { type: "Serum", name: "Minimalist 10% Vitamin C Face Serum", price: "₹699", rating: "4.5 ★", image: "https://m.media-amazon.com/images/I/61r-D+yX6tL._SL1500_.jpg", link: "https://beminimalist.co/products/vitamin-c-10" },
-            { type: "Serum", name: "The Derma Co 10% Vitamin C Serum", price: "₹699", rating: "4.4 ★", image: "https://m.media-amazon.com/images/I/51Z-R-2XQDL._SL1200_.jpg", link: "https://thedermaco.com/products/10-vitamin-c-face-serum-30ml" },
-            { type: "Serum", name: "Dot & Key 20% Vitamin C Serum", price: "₹695", rating: "4.5 ★", image: "https://m.media-amazon.com/images/I/51x2WvA-90L._SL1500_.jpg", link: "https://www.dotandkey.com/products/20-vitamin-c-serum" }
+            { type: "Serum", name: "Minimalist Alpha Arbutin", price: "₹549", rating: "4.7 ★", image: "https://wsrv.nl/?url=m.media-amazon.com/images/I/61gR5D8F0GL._SL1000_.jpg", link: "https://beminimalist.co/search?q=Alpha+Arbutin" },
+            { type: "Cream", name: "Derma Co Kojic Acid", price: "₹499", rating: "4.5 ★", image: "https://wsrv.nl/?url=m.media-amazon.com/images/I/51V+z2O1qSL._SL1000_.jpg", link: "https://thedermaco.com/search?q=Kojic+Acid+Cream" },
+            { type: "Serum", name: "Foxtale Vitamin C", price: "₹595", rating: "4.6 ★", image: "https://wsrv.nl/?url=m.media-amazon.com/images/I/51n0b2DxtNL._SL1000_.jpg", link: "https://foxtale.in/search?q=Vitamin+C+Serum" },
+            { type: "Sunscreen", name: "Dot & Key Vitamin C Sunscreen", price: "₹495", rating: "4.5 ★", image: "https://wsrv.nl/?url=m.media-amazon.com/images/I/51E-R2x3XyL._SL1000_.jpg", link: "https://www.dotandkey.com/search?q=Vitamin+C+Sunscreen" },
+            { type: "Serum", name: "Plum 15% Vitamin C", price: "₹790", rating: "4.4 ★", image: "https://wsrv.nl/?url=m.media-amazon.com/images/I/51p4R+G3kVL._SL1000_.jpg", link: "https://plumgoodness.com/search?q=Vitamin+C+Serum" }
         ],
         sensitive: [
-            { type: "Moisturizer", name: "Minimalist 10% Vitamin B5 Moisturizer", price: "₹349", rating: "4.7 ★", image: "https://m.media-amazon.com/images/I/51J6H0Xb7SL._SL1500_.jpg", link: "https://beminimalist.co/products/vitamin-b5-10-moisturizer" },
-            { type: "Serum", name: "Minimalist Multi-Peptide Serum", price: "₹699", rating: "4.6 ★", image: "https://m.media-amazon.com/images/I/61nQ+T6-M4L._SL1500_.jpg", link: "https://beminimalist.co/products/multi-peptide-10-in-depth-hydration-and-repair" },
-            { type: "Cream", name: "Plum 1% Oat & Allantoin All-Day Cream", price: "₹395", rating: "4.6 ★", image: "https://m.media-amazon.com/images/I/51A9a7aJgXL._SL1500_.jpg", link: "https://plumgoodness.com/products/1-oat-allantoin-all-day-nourishing-face-cream" },
-            { type: "Cream", name: "Re'equil Ceramide & Hyaluronic Cream", price: "₹395", rating: "4.8 ★", image: "https://m.media-amazon.com/images/I/51r9LpZqF2L._SL1000_.jpg", link: "https://www.reequil.com/products/ceramide-hyaluronic-acid-moisturiser-for-dry-skin" },
-            { type: "Cream", name: "Dot & Key Ceramides & Hyaluronic Cream", price: "₹395", rating: "4.5 ★", image: "https://m.media-amazon.com/images/I/51D6B+E1a6L._SL1500_.jpg", link: "https://www.dotandkey.com/products/ceramide-hyaluronic-skin-barrier-repair-face-cream" },
-            { type: "Sunscreen", name: "Minimalist SPF 50 Sunscreen", price: "₹399", rating: "4.6 ★", image: "https://m.media-amazon.com/images/I/51M3v0b9B5L._SL1500_.jpg", link: "https://beminimalist.co/products/multi-vitamin-spf-50" },
-            { type: "Serum", name: "Dr. Sheth's Centella & Niacinamide Serum", price: "₹599", rating: "4.5 ★", image: "https://m.media-amazon.com/images/I/51h1T2bKxXL._SL1500_.jpg", link: "https://www.drsheths.com/products/centella-niacinamide-serum" },
-            { type: "Sunscreen", name: "Aqualogica Hydrate+ Dewy Sunscreen", price: "₹399", rating: "4.4 ★", image: "https://m.media-amazon.com/images/I/51w7YqZc2KL._SL1500_.jpg", link: "https://aqualogica.in/product/hydrate-dewy-sunscreen-with-coconut-water-hyaluronic-acid-50g" },
-            { type: "Sunscreen", name: "The Derma Co 1% Hyaluronic Sunscreen", price: "₹499", rating: "4.7 ★", image: "https://m.media-amazon.com/images/I/51P+2M3gE-L._SL1200_.jpg", link: "https://thedermaco.com/products/1-hyaluronic-sunscreen-aqua-gel" },
-            { type: "Cleanser", name: "Cetaphil Gentle Skin Cleanser", price: "₹333", rating: "4.8 ★", image: "https://m.media-amazon.com/images/I/61+M+8a+x3L._SL1500_.jpg", link: "https://www.cetaphil.in/product/cetaphil-gentle-skin-cleanser" }
+            { type: "Moisturizer", name: "Minimalist B5 Moisturizer", price: "₹349", rating: "4.7 ★", image: "https://wsrv.nl/?url=m.media-amazon.com/images/I/51J6H0Xb7SL._SL1000_.jpg", link: "https://beminimalist.co/search?q=Vitamin+B5+Moisturizer" },
+            { type: "Cream", name: "Re'equil Ceramide Cream", price: "₹395", rating: "4.8 ★", image: "https://wsrv.nl/?url=m.media-amazon.com/images/I/51r9LpZqF2L._SL1000_.jpg", link: "https://www.reequil.com/search?q=Ceramide+Moisturizer" },
+            { type: "Cream", name: "Plum 1% Oat Cream", price: "₹395", rating: "4.6 ★", image: "https://wsrv.nl/?url=m.media-amazon.com/images/I/51A9a7aJgXL._SL1000_.jpg", link: "https://plumgoodness.com/search?q=Oat+Allantoin+Cream" },
+            { type: "Serum", name: "Dr. Sheth's Centella Serum", price: "₹599", rating: "4.5 ★", image: "https://wsrv.nl/?url=m.media-amazon.com/images/I/51h1T2bKxXL._SL1000_.jpg", link: "https://www.drsheths.com/search?q=Centella+Niacinamide+Serum" },
+            { type: "Sunscreen", name: "Minimalist SPF 50", price: "₹399", rating: "4.6 ★", image: "https://wsrv.nl/?url=m.media-amazon.com/images/I/51M3v0b9B5L._SL1000_.jpg", link: "https://beminimalist.co/search?q=SPF+50+Sunscreen" }
         ]
     };
 
@@ -321,7 +296,7 @@
         document.getElementById("loading-overlay").style.display = "block";
         document.getElementById("display-name").innerText = userAnswers['name'];
 
-        setTimeout(() => { document.getElementById("loading-msg").innerText = "Cross-referencing specific issues with database..."; }, 1500);
+        setTimeout(() => { document.getElementById("loading-msg").innerText = "Bypassing image security & syncing search links..."; }, 1500);
         setTimeout(() => { document.getElementById("loading-msg").innerText = "Assembling custom routine and matching products..."; }, 3000);
         
         setTimeout(() => {
@@ -361,19 +336,16 @@
             const products = productDatabase[concernType] || productDatabase['oily'];
             let carouselHTML = `<div class="product-carousel">`;
             products.forEach(prod => {
-                // SMART FALLBACK ADDED HERE: onerror="this.src='fallback_url'" ensures no broken image icon is ever shown
-                const fallbackImg = `https://ui-avatars.com/api/?name=${encodeURIComponent(prod.name)}&background=1e1e35&color=00ff80&size=400&font-size=0.15`;
-                
                 carouselHTML += `
                     <div class="product-card">
                         <span class="product-category-tag">${prod.type}</span>
-                        <img class="product-img" src="${prod.image}" onerror="this.src='${fallbackImg}'" alt="${prod.name}">
+                        <img class="product-img" src="${prod.image}" alt="${prod.name}">
                         <div class="product-title">${prod.name}</div>
                         <div class="product-meta">
                             <span class="product-price">${prod.price}</span>
                             <span class="product-rating">${prod.rating}</span>
                         </div>
-                        <a href="${prod.link}" target="_blank" class="buy-btn">🛒 Official Store</a>
+                        <a href="${prod.link}" target="_blank" class="buy-btn">🔍 Search Store</a>
                     </div>`;
             });
             carouselHTML += `</div>`;
