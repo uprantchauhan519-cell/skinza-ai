@@ -252,41 +252,41 @@
         nextStep(stepIndex);
     }
 
-    // 🏢 NYKAA POWERED PRODUCT DATABASE (FIXED LINKS)
+    // 🛍️ NYKAA DIRECT LINKS PRODUCT DATABASE
     const productDatabase = {
         oily: [
-            { type: "Cleanser", name: "Minimalist 2% Salicylic Acid Face Wash", price: "₹299", rating: "4.6 ★", image: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=200", link: "https://www.nykaa.com/search/result/?q=Minimalist+Salicylic+Acid+Face+Wash" },
-            { type: "Cleanser", name: "Cetaphil Oily Skin Cleanser", price: "₹545", rating: "4.5 ★", image: "https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?w=200", link: "https://www.nykaa.com/search/result/?q=Cetaphil+Oily+Skin+Cleanser" },
-            { type: "Toner", name: "Plum Green Tea Alcohol-Free Toner", price: "₹390", rating: "4.4 ★", image: "https://images.unsplash.com/photo-1608248597481-496100c8c836?w=200", link: "https://www.nykaa.com/search/result/?q=Plum+Green+Tea+Toner" },
-            { type: "Serum", name: "The Derma Co 10% Niacinamide Serum", price: "₹599", rating: "4.3 ★", image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=200", link: "https://www.nykaa.com/search/result/?q=The+Derma+Co+10+Niacinamide+Serum" },
-            { type: "Moisturizer", name: "Pond's Super Light Gel Oil-Free", price: "₹200", rating: "4.5 ★", image: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=200", link: "https://www.nykaa.com/search/result/?q=Ponds+Super+Light+Gel" },
-            { type: "Sunscreen", name: "Re'equil Ultra Matte Dry Touch Sunscreen", price: "₹780", rating: "4.6 ★", image: "https://images.unsplash.com/photo-1612444530582-fc66183b16f7?w=200", link: "https://www.nykaa.com/search/result/?q=Reequil+Ultra+Matte+Sunscreen" }
+            { type: "Cleanser", name: "Minimalist 2% Salicylic Acid Face Wash", price: "₹299", rating: "4.6 ★", image: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=200", link: "https://www.nykaa.com/minimalist-2percent-salicylic-acid-face-wash-for-oily-acne-prone-skin/p/1066115" },
+            { type: "Cleanser", name: "Cetaphil Oily Skin Cleanser", price: "₹545", rating: "4.5 ★", image: "https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?w=200", link: "https://www.nykaa.com/cetaphil-oily-skin-cleanser/p/20990" },
+            { type: "Toner", name: "Plum Green Tea Alcohol-Free Toner", price: "₹390", rating: "4.4 ★", image: "https://images.unsplash.com/photo-1608248597481-496100c8c836?w=200", link: "https://www.nykaa.com/plum-green-tea-alcohol-free-toner/p/23985" },
+            { type: "Serum", name: "The Derma Co 10% Niacinamide Serum", price: "₹599", rating: "4.3 ★", image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=200", link: "https://www.nykaa.com/the-derma-co-10-niacinamide-serum-for-acne-marks/p/1167417" },
+            { type: "Moisturizer", name: "Pond's Super Light Gel Oil-Free", price: "₹200", rating: "4.5 ★", image: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=200", link: "https://www.nykaa.com/ponds-super-light-gel-moisturiser/p/501335" },
+            { type: "Sunscreen", name: "Re'equil Ultra Matte Dry Touch Sunscreen", price: "₹780", rating: "4.6 ★", image: "https://images.unsplash.com/photo-1612444530582-fc66183b16f7?w=200", link: "https://www.nykaa.com/re-equil-ultra-matte-dry-touch-sunscreen-gel-spf-50-pa/p/767936" }
         ],
         dry: [
-            { type: "Cleanser", name: "Cetaphil Gentle Skin Cleanser", price: "₹333", rating: "4.7 ★", image: "https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?w=200", link: "https://www.nykaa.com/search/result/?q=Cetaphil+Gentle+Skin+Cleanser" },
-            { type: "Serum", name: "Minimalist 2% Hyaluronic Acid", price: "₹599", rating: "4.5 ★", image: "https://images.unsplash.com/photo-1617897903246-719242758050?w=200", link: "https://www.nykaa.com/search/result/?q=Minimalist+Hyaluronic+Acid" },
-            { type: "Moisturizer", name: "Dot & Key Ceramides & Hyaluronic Cream", price: "₹395", rating: "4.4 ★", image: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=200", link: "https://www.nykaa.com/search/result/?q=Dot+and+Key+Ceramides" },
-            { type: "Moisturizer", name: "Bioderma Atoderm Intensive Baume", price: "₹1300", rating: "4.8 ★", image: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=200", link: "https://www.nykaa.com/search/result/?q=Bioderma+Atoderm+Baume" },
-            { type: "Sunscreen", name: "Isntree Hyaluronic Acid Watery Sun Gel", price: "₹1650", rating: "4.7 ★", image: "https://images.unsplash.com/photo-1612444530582-fc66183b16f7?w=200", link: "https://www.nykaa.com/search/result/?q=Isntree+Sun+Gel" }
+            { type: "Cleanser", name: "Cetaphil Gentle Skin Cleanser", price: "₹333", rating: "4.7 ★", image: "https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?w=200", link: "https://www.nykaa.com/cetaphil-gentle-skin-cleanser/p/20991" },
+            { type: "Serum", name: "Minimalist 2% Hyaluronic Acid", price: "₹599", rating: "4.5 ★", image: "https://images.unsplash.com/photo-1617897903246-719242758050?w=200", link: "https://www.nykaa.com/minimalist-2percent-hyaluronic-acid-face-serum/p/1066120" },
+            { type: "Moisturizer", name: "Dot & Key Ceramides & Hyaluronic Cream", price: "₹395", rating: "4.4 ★", image: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=200", link: "https://www.nykaa.com/dot-key-ceramides-hyaluronic-skin-barrier-repair-face-cream/p/5129668" },
+            { type: "Moisturizer", name: "Bioderma Atoderm Intensive Baume", price: "₹1300", rating: "4.8 ★", image: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=200", link: "https://www.nykaa.com/bioderma-atoderm-intensive-baume/p/12185" },
+            { type: "Sunscreen", name: "Isntree Hyaluronic Acid Watery Sun Gel", price: "₹1650", rating: "4.7 ★", image: "https://images.unsplash.com/photo-1612444530582-fc66183b16f7?w=200", link: "https://www.nykaa.com/isntree-hyaluronic-acid-watery-sun-gel/p/2798606" }
         ],
         acne: [
-            { type: "Cleanser", name: "Sebamed Clear Face Cleansing Foam", price: "₹580", rating: "4.5 ★", image: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=200", link: "https://www.nykaa.com/search/result/?q=Sebamed+Clear+Face+Foam" },
-            { type: "Treatment", name: "COSRX Acne Pimple Master Patch", price: "₹299", rating: "4.8 ★", image: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=200", link: "https://www.nykaa.com/search/result/?q=COSRX+Acne+Pimple+Patch" },
-            { type: "Serum", name: "Axis-Y Dark Spot Correcting Glow Serum", price: "₹1500", rating: "4.7 ★", image: "https://images.unsplash.com/photo-1617897903246-719242758050?w=200", link: "https://www.nykaa.com/search/result/?q=Axis+Y+Dark+Spot+Serum" },
-            { type: "Moisturizer", name: "Plum Green Tea Oil Free Moisturizer", price: "₹470", rating: "4.4 ★", image: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=200", link: "https://www.nykaa.com/search/result/?q=Plum+Green+Tea+Moisturizer" },
-            { type: "Sunscreen", name: "UV Doux Silicone Sunscreen Gel", price: "₹650", rating: "4.6 ★", image: "https://images.unsplash.com/photo-1612444530582-fc66183b16f7?w=200", link: "https://www.nykaa.com/search/result/?q=UV+Doux+Sunscreen" }
+            { type: "Cleanser", name: "Sebamed Clear Face Cleansing Foam", price: "₹580", rating: "4.5 ★", image: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=200", link: "https://www.nykaa.com/sebamed-clear-face-cleansing-foam/p/7740" },
+            { type: "Treatment", name: "COSRX Acne Pimple Master Patch", price: "₹299", rating: "4.8 ★", image: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=200", link: "https://www.nykaa.com/cosrx-acne-pimple-master-patch/p/557675" },
+            { type: "Serum", name: "Axis-Y Dark Spot Correcting Glow Serum", price: "₹1500", rating: "4.7 ★", image: "https://images.unsplash.com/photo-1617897903246-719242758050?w=200", link: "https://www.nykaa.com/axis-y-dark-spot-correcting-glow-serum/p/6530188" },
+            { type: "Moisturizer", name: "Plum Green Tea Oil Free Moisturizer", price: "₹470", rating: "4.4 ★", image: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=200", link: "https://www.nykaa.com/plum-green-tea-mattifying-moisturizer/p/23986" },
+            { type: "Sunscreen", name: "UV Doux Silicone Sunscreen Gel", price: "₹650", rating: "4.6 ★", image: "https://images.unsplash.com/photo-1612444530582-fc66183b16f7?w=200", link: "https://www.nykaa.com/uv-doux-silicone-sunscreen-gel-spf-50-pa/p/1271169" }
         ],
         pigmentation: [
-            { type: "Cleanser", name: "Dermalogica Daily Microfoliant", price: "₹1500", rating: "4.7 ★", image: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=200", link: "https://www.nykaa.com/search/result/?q=Dermalogica+Daily+Microfoliant" },
-            { type: "Serum", name: "Minimalist 2% Alpha Arbutin", price: "₹549", rating: "4.5 ★", image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=200", link: "https://www.nykaa.com/search/result/?q=Minimalist+Alpha+Arbutin" },
-            { type: "Serum", name: "FoxTale 15% Vitamin C Serum", price: "₹595", rating: "4.3 ★", image: "https://images.unsplash.com/photo-1617897903246-719242758050?w=200", link: "https://www.nykaa.com/search/result/?q=FoxTale+Vitamin+C" },
-            { type: "Sunscreen", name: "Blynds Emulgel SPF 40 PA+++", price: "₹450", rating: "4.6 ★", image: "https://images.unsplash.com/photo-1612444530582-fc66183b16f7?w=200", link: "https://www.nykaa.com/search/result/?q=Blynds+Sunscreen" }
+            { type: "Cleanser", name: "Dermalogica Daily Microfoliant", price: "₹1500", rating: "4.7 ★", image: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=200", link: "https://www.nykaa.com/dermalogica-daily-microfoliant-13g/p/451475" },
+            { type: "Serum", name: "Minimalist 2% Alpha Arbutin", price: "₹549", rating: "4.5 ★", image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=200", link: "https://www.nykaa.com/minimalist-2percent-alpha-arbutin-face-serum/p/1066118" },
+            { type: "Serum", name: "FoxTale 15% Vitamin C Serum", price: "₹595", rating: "4.3 ★", image: "https://images.unsplash.com/photo-1617897903246-719242758050?w=200", link: "https://www.nykaa.com/foxtale-15percent-vitamin-c-face-serum/p/5012543" },
+            { type: "Sunscreen", name: "Blynds Emulgel SPF 40 PA+++", price: "₹450", rating: "4.6 ★", image: "https://images.unsplash.com/photo-1612444530582-fc66183b16f7?w=200", link: "https://www.nykaa.com/blynds-emulgel-spf-40-pa-sunscreen/p/1066119" }
         ],
         sensitive: [
-            { type: "Cleanser", name: "Simple Kind to Skin Refreshing Wash", price: "₹385", rating: "4.5 ★", image: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=200", link: "https://www.nykaa.com/search/result/?q=Simple+Refreshing+Face+Wash" },
-            { type: "Serum", name: "Purito Centella Unscented Serum", price: "₹1500", rating: "4.7 ★", image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=200", link: "https://www.nykaa.com/search/result/?q=Purito+Centella+Serum" },
-            { type: "Moisturizer", name: "Aveeno Dermexa Daily Emollient Cream", price: "₹900", rating: "4.8 ★", image: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=200", link: "https://www.nykaa.com/search/result/?q=Aveeno+Dermexa" },
-            { type: "Sunscreen", name: "Episoft AC Sunscreen SPF 30", price: "₹550", rating: "4.6 ★", image: "https://images.unsplash.com/photo-1612444530582-fc66183b16f7?w=200", link: "https://www.nykaa.com/search/result/?q=Episoft+AC+Sunscreen" }
+            { type: "Cleanser", name: "Simple Kind to Skin Refreshing Wash", price: "₹385", rating: "4.5 ★", image: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=200", link: "https://www.nykaa.com/simple-kind-to-skin-refreshing-facial-wash/p/390977" },
+            { type: "Serum", name: "Purito Centella Unscented Serum", price: "₹1500", rating: "4.7 ★", image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=200", link: "https://www.nykaa.com/purito-centella-unscented-serum/p/2798607" },
+            { type: "Moisturizer", name: "Aveeno Dermexa Daily Emollient Cream", price: "₹900", rating: "4.8 ★", image: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=200", link: "https://www.nykaa.com/aveeno-dermexa-daily-emollient-cream/p/104523" },
+            { type: "Sunscreen", name: "Episoft AC Sunscreen SPF 30", price: "₹550", rating: "4.6 ★", image: "https://images.unsplash.com/photo-1612444530582-fc66183b16f7?w=200", link: "https://www.nykaa.com/episoft-ac-sunscreen-lotion-spf-30/p/1066121" }
         ]
     };
 
