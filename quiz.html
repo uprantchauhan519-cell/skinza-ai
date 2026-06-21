@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SKINZA AI - Advanced Diagnostics</title>
+    <title>SKINZA AI - Smart Diagnostics</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
@@ -14,24 +14,35 @@
             width: 100%; max-width: 700px; background: #141425;
             border: 1px solid rgba(138, 43, 226, 0.2); border-radius: 24px;
             padding: 35px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5); margin-top: 20px; margin-bottom: 40px;
+            position: relative; overflow: hidden;
         }
 
         h1 { font-size: 32px; font-weight: 800; background: linear-gradient(135deg, #00ff80, #8a2be2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; margin-bottom: 5px; }
         p.subtitle { color: #a0a0c0; text-align: center; font-size: 15px; margin-bottom: 35px; }
 
-        /* Form Grid Styles */
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
-        .full-width { grid-column: 1 / -1; }
+        /* Stepper UI Styles */
+        .step { display: none; animation: slideIn 0.4s ease forwards; }
+        .step.active { display: block; }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+
+        .question-title { font-size: 20px; font-weight: 700; margin-bottom: 20px; color: #e0e0ff; }
         
         .input-group { margin-bottom: 15px; }
-        label { display: block; font-size: 14px; font-weight: 600; color: #e0e0ff; margin-bottom: 8px; }
-        
-        input, select {
-            width: 100%; padding: 14px; background: #1e1e38;
+        label { display: block; font-size: 14px; font-weight: 600; color: #a0a0c0; margin-bottom: 8px; }
+        input, select, textarea {
+            width: 100%; padding: 16px; background: #1e1e38;
             border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px;
             color: #ffffff; font-size: 15px; outline: none; transition: all 0.3s ease;
         }
-        input:focus, select:focus { border-color: #00ff80; box-shadow: 0 0 10px rgba(0, 255, 128, 0.2); }
+        input:focus, select:focus, textarea:focus { border-color: #00ff80; box-shadow: 0 0 10px rgba(0, 255, 128, 0.2); }
+
+        /* Single Click Option Buttons */
+        .option-btn {
+            display: block; width: 100%; background: #1e1e38; border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ffffff; padding: 18px; border-radius: 14px; font-size: 16px; font-weight: 600;
+            text-align: left; cursor: pointer; transition: all 0.2s ease; margin-bottom: 12px;
+        }
+        .option-btn:hover { border-color: #00ff80; background: rgba(0, 255, 128, 0.08); transform: translateY(-2px); }
 
         .btn {
             display: block; width: 100%; background: linear-gradient(135deg, #00ff80, #00bc70);
@@ -40,30 +51,31 @@
         }
         .btn:hover { transform: translateY(-3px); box-shadow: 0 12px 24px rgba(0, 255, 128, 0.3); }
 
-        /* Dashboard Result Styles */
+        /* Progress Bar */
+        .progress-container { width: 100%; background: #1e1e38; height: 6px; border-radius: 10px; margin-bottom: 30px; overflow: hidden; }
+        .progress-bar { height: 100%; background: #00ff80; width: 0%; transition: width 0.4s ease; }
+
+        /* Dashboard Result Styles (Preserved) */
         #result-wrapper { display: none; animation: fadeIn 0.5s ease-in; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        
         .patient-card { background: linear-gradient(135deg, rgba(138,43,226,0.1), rgba(0,255,128,0.05)); border-radius: 16px; padding: 20px; margin-bottom: 30px; border: 1px solid rgba(0,255,128,0.2); }
         .patient-card h2 { color: #00ff80; font-size: 22px; margin-bottom: 5px; }
         .patient-card p { color: #a0a0c0; font-size: 14px; }
-
         .report-section { background: #1a1a30; border-radius: 16px; padding: 20px; margin-bottom: 25px; border-left: 4px solid #8a2be2; }
         .report-section h3 { color: #fff; font-size: 18px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
         .report-content { color: #d1d1f0; font-size: 15px; line-height: 1.6; white-space: pre-line; }
 
-        /* Enhanced Carousel Styles for Massive Data */
+        /* Enhanced Carousel Styles */
         .product-carousel { display: flex; overflow-x: auto; gap: 16px; padding: 10px 5px 20px 5px; scroll-snap-type: x mandatory; scrollbar-width: none; }
         .product-carousel::-webkit-scrollbar { display: none; }
-        .product-card { flex: 0 0 220px; scroll-snap-align: start; background: #1e1e35; border: 1px solid rgba(0, 255, 128, 0.1); border-radius: 18px; padding: 16px; text-align: center; transition: all 0.3s ease; position: relative; }
-        .product-card:hover { transform: translateY(-5px); border-color: #00ff80; box-shadow: 0 10px 24px rgba(0, 255, 128, 0.2); }
+        .product-card { flex: 0 0 220px; scroll-snap-align: start; background: #1e1e35; border: 1px solid rgba(0, 255, 128, 0.1); border-radius: 18px; padding: 16px; text-align: center; position: relative; }
         .product-category-tag { position: absolute; top: 10px; left: 10px; background: rgba(0, 255, 128, 0.2); color: #00ff80; font-size: 10px; padding: 3px 8px; border-radius: 10px; font-weight: bold; text-transform: uppercase; }
         .product-img { width: 100%; height: 130px; object-fit: cover; border-radius: 12px; margin-bottom: 12px; margin-top: 15px; }
         .product-title { font-size: 13px; color: #ffffff; font-weight: 600; margin: 8px 0; height: 38px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
         .product-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
         .product-price { color: #00ff80; font-weight: 700; font-size: 15px; }
         .product-rating { background: rgba(255, 193, 7, 0.1); color: #ffc107; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: bold; }
-        .buy-btn { display: block; width: 100%; background: linear-gradient(135deg, #00ff80, #00bc70); color: #0d0d18; text-decoration: none; padding: 10px; border-radius: 10px; font-weight: 700; font-size: 13px; transition: background 0.2s; }
+        .buy-btn { display: block; width: 100%; background: linear-gradient(135deg, #00ff80, #00bc70); color: #0d0d18; text-decoration: none; padding: 10px; border-radius: 10px; font-weight: 700; font-size: 13px; text-align: center; }
 
         #loading-overlay { display: none; text-align: center; padding: 40px 0; }
         .spinner { width: 50px; height: 50px; border: 5px solid rgba(0, 255, 128, 0.2); border-top-color: #00ff80; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px auto; }
@@ -77,89 +89,103 @@
     <p class="subtitle">Complete Diagnostic Profiling Engine</p>
 
     <div id="quiz-wrapper">
-        <div class="form-grid">
+        <div class="progress-container"><div class="progress-bar" id="progress"></div></div>
+
+        <div class="step active" id="step-0">
+            <div class="question-title">Let's build your profile</div>
             <div class="input-group">
                 <label>First Name</label>
-                <input type="text" id="user-name" placeholder="Enter your name" required>
+                <input type="text" id="user-name" placeholder="Enter your name">
             </div>
             <div class="input-group">
                 <label>Age</label>
-                <input type="number" id="user-age" placeholder="e.g. 18" required>
+                <input type="number" id="user-age" placeholder="e.g. 18">
             </div>
-            <div class="input-group full-width">
-                <label>Gender Identity</label>
+            <div class="input-group">
+                <label>Gender</label>
                 <select id="user-gender">
                     <option value="male">Male</option>
                     <option value="female">Female</option>
                     <option value="other">Other</option>
                 </select>
             </div>
+            <button class="btn" onclick="nextStep(0)">Continue ➔</button>
         </div>
 
-        <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 25px 0;">
-
-        <div class="input-group">
-            <label>1. What is your primary skin concern right now?</label>
-            <select id="q1">
-                <option value="acne">Breakouts & Active Acne</option>
-                <option value="oily">Excessive Oil & Open Pores</option>
-                <option value="dry">Severe Dryness & Flaking</option>
-                <option value="pigmentation">Dark Spots & Pigmentation</option>
-                <option value="sensitive">Redness & High Sensitivity</option>
-            </select>
-        </div>
-        <div class="input-group">
-            <label>2. How does your skin feel 2 hours after washing?</label>
-            <select id="q2">
-                <option value="oily">Greasy and shiny all over</option>
-                <option value="dry">Tight, stretchy and dry</option>
-                <option value="combo">Oily on nose/forehead, dry on cheeks</option>
-                <option value="normal">Smooth and comfortable</option>
-            </select>
-        </div>
-        <div class="input-group">
-            <label>3. How sensitive is your skin to new products?</label>
-            <select id="q3">
-                <option value="sensitive">Very (turns red/burns easily)</option>
-                <option value="normal">Rarely reacts to anything</option>
-            </select>
-        </div>
-        <div class="input-group">
-            <label>4. Daily sun exposure?</label>
-            <select id="q4"><option value="high">High (Outdoors often)</option><option value="low">Low (Mostly Indoors/Screens)</option></select>
-        </div>
-        <div class="input-group">
-            <label>5. Current water intake?</label>
-            <select id="q5"><option value="low">Less than 4 glasses</option><option value="medium">5-7 glasses</option><option value="high">More than 8 glasses</option></select>
-        </div>
-        <div class="input-group">
-            <label>6. Sleep patterns?</label>
-            <select id="q6"><option value="poor">Less than 6 hours (Irregular)</option><option value="good">7-8 hours (Consistent)</option></select>
-        </div>
-        <div class="input-group">
-            <label>7. Stress levels currently?</label>
-            <select id="q7"><option value="high">High Stress / Exams / Work</option><option value="low">Relaxed / Normal</option></select>
-        </div>
-        <div class="input-group">
-            <label>8. Diet type?</label>
-            <select id="q8"><option value="junk">Frequent junk food / dairy / sugar</option><option value="healthy">Mostly home-cooked / balanced</option></select>
-        </div>
-        <div class="input-group">
-            <label>9. Preferred product texture?</label>
-            <select id="q9"><option value="gel">Lightweight Gel (Absorbs instantly)</option><option value="cream">Rich Cream (Heavy Moisturizing)</option></select>
-        </div>
-        <div class="input-group">
-            <label>10. Any known allergies? (Optional)</label>
-            <input type="text" id="q10" placeholder="e.g. Fragrance, Vitamin C, None">
+        <div class="step" id="step-1">
+            <div class="question-title">1. What is your primary skin concern right now?</div>
+            <button class="option-btn" onclick="saveAndNext('concern', 'acne', 1)">Breakouts & Active Acne</button>
+            <button class="option-btn" onclick="saveAndNext('concern', 'oily', 1)">Excessive Oil & Open Pores</button>
+            <button class="option-btn" onclick="saveAndNext('concern', 'dry', 1)">Severe Dryness & Flaking</button>
+            <button class="option-btn" onclick="saveAndNext('concern', 'pigmentation', 1)">Dark Spots & Pigmentation</button>
+            <button class="option-btn" onclick="saveAndNext('concern', 'sensitive', 1)">Redness & High Sensitivity</button>
         </div>
 
-        <button class="btn" onclick="startDeepAnalysis()">Generate AI Blueprint</button>
+        <div class="step" id="step-2">
+            <div class="question-title">2. How does your skin feel 2 hours after washing?</div>
+            <button class="option-btn" onclick="saveAndNext('feel', 'oily', 2)">Greasy and shiny all over</button>
+            <button class="option-btn" onclick="saveAndNext('feel', 'dry', 2)">Tight, stretchy and dry</button>
+            <button class="option-btn" onclick="saveAndNext('feel', 'combo', 2)">Oily on nose/forehead, dry on cheeks</button>
+            <button class="option-btn" onclick="saveAndNext('feel', 'normal', 2)">Smooth and comfortable</button>
+        </div>
+
+        <div class="step" id="step-3">
+            <div class="question-title">3. How sensitive is your skin to new products?</div>
+            <button class="option-btn" onclick="saveAndNext('sensitivity', 'sensitive', 3)">Very (turns red/burns easily)</button>
+            <button class="option-btn" onclick="saveAndNext('sensitivity', 'normal', 3)">Rarely reacts to anything</button>
+        </div>
+
+        <div class="step" id="step-4">
+            <div class="question-title">4. What is your daily sun exposure?</div>
+            <button class="option-btn" onclick="saveAndNext('sun', 'high', 4)">High (Outdoors often)</button>
+            <button class="option-btn" onclick="saveAndNext('sun', 'low', 4)">Low (Mostly Indoors/Screens)</button>
+        </div>
+
+        <div class="step" id="step-5">
+            <div class="question-title">5. What is your current water intake?</div>
+            <button class="option-btn" onclick="saveAndNext('water', 'low', 5)">Less than 4 glasses</button>
+            <button class="option-btn" onclick="saveAndNext('water', 'medium', 5)">5-7 glasses</button>
+            <button class="option-btn" onclick="saveAndNext('water', 'high', 5)">More than 8 glasses</button>
+        </div>
+
+        <div class="step" id="step-6">
+            <div class="question-title">6. How are your sleep patterns?</div>
+            <button class="option-btn" onclick="saveAndNext('sleep', 'poor', 6)">Less than 6 hours (Irregular)</button>
+            <button class="option-btn" onclick="saveAndNext('sleep', 'good', 6)">7-8 hours (Consistent)</button>
+        </div>
+
+        <div class="step" id="step-7">
+            <div class="question-title">7. What are your stress levels currently?</div>
+            <button class="option-btn" onclick="saveAndNext('stress', 'high', 7)">High Stress / Exams / Work</button>
+            <button class="option-btn" onclick="saveAndNext('stress', 'low', 7)">Relaxed / Normal</button>
+        </div>
+
+        <div class="step" id="step-8">
+            <div class="question-title">8. How would you describe your diet?</div>
+            <button class="option-btn" onclick="saveAndNext('diet', 'junk', 8)">Frequent junk food / dairy / sugar</button>
+            <button class="option-btn" onclick="saveAndNext('diet', 'healthy', 8)">Mostly home-cooked / balanced</button>
+        </div>
+
+        <div class="step" id="step-9">
+            <div class="question-title">9. What is your preferred product texture?</div>
+            <button class="option-btn" onclick="saveAndNext('texture', 'gel', 9)">Lightweight Gel (Absorbs instantly)</button>
+            <button class="option-btn" onclick="saveAndNext('texture', 'cream', 9)">Rich Cream (Heavy Moisturizing)</button>
+        </div>
+
+        <div class="step" id="step-10">
+            <div class="question-title">10. Any specific issue or known allergies?</div>
+            <div class="input-group">
+                <label>Tell us any specific skin problem you want the AI to focus on, or leave blank.</label>
+                <textarea id="specific-issue" rows="4" placeholder="e.g. I have dark circles and allergic to Vitamin C..."></textarea>
+            </div>
+            <button class="btn" onclick="startDeepAnalysis()">Generate AI Blueprint ➔</button>
+        </div>
     </div>
 
     <div id="loading-overlay">
         <div class="spinner"></div>
         <h3 style="color: #00ff80;">Running AI Diagnostics Engine...</h3>
-        <p style="color: #a0a0c0; margin-top: 10px;" id="loading-msg">Processing 10 data points & querying database...</p>
+        <p style="color: #a0a0c0; margin-top: 10px;" id="loading-msg">Analyzing specific issues & querying database...</p>
     </div>
 
     <div id="result-wrapper">
@@ -194,41 +220,59 @@
             <div class="report-content" id="ai-routine">Loading...</div>
         </div>
 
-        <button class="btn" style="background: #1e1e38; color:#fff;" onclick="window.location.reload()">Recalculate Profile</button>
+        <button class="btn" style="background: #1e1e38; color:#fff;" onclick="window.location.reload()">Retake Assessment</button>
     </div>
 </div>
 
 <script>
+    // System Variables
+    let currentStep = 0;
+    const totalSteps = 10;
+    let userAnswers = {};
+
+    function updateProgress() {
+        const progress = (currentStep / totalSteps) * 100;
+        document.getElementById('progress').style.width = progress + '%';
+    }
+
+    function nextStep(stepIndex) {
+        if(stepIndex === 0) {
+            const name = document.getElementById("user-name").value;
+            if(!name) { alert("Please enter your name!"); return; }
+            userAnswers['name'] = name;
+        }
+        
+        document.getElementById(`step-${stepIndex}`).classList.remove('active');
+        currentStep++;
+        document.getElementById(`step-${currentStep}`).classList.add('active');
+        updateProgress();
+    }
+
+    function saveAndNext(key, value, stepIndex) {
+        userAnswers[key] = value;
+        nextStep(stepIndex);
+    }
+
     // 🏢 BURJ KHALIFA SIZED PRODUCT DATABASE
-    // Scalable JSON format: You can keep adding hundreds of products here without breaking the code.
     const productDatabase = {
         oily: [
             { type: "Cleanser", name: "Minimalist 2% Salicylic Acid Face Wash", price: "₹299", rating: "4.6 ★", image: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=200", link: "https://www.amazon.in/s?k=Minimalist+Salicylic+Acid+Face+Wash" },
             { type: "Cleanser", name: "Cetaphil Oily Skin Cleanser", price: "₹545", rating: "4.5 ★", image: "https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?w=200", link: "https://www.amazon.in/s?k=Cetaphil+Oily+Skin+Cleanser" },
             { type: "Toner", name: "Plum Green Tea Alcohol-Free Toner", price: "₹390", rating: "4.4 ★", image: "https://images.unsplash.com/photo-1608248597481-496100c8c836?w=200", link: "https://www.amazon.in/s?k=Plum+Green+Tea+Toner" },
             { type: "Serum", name: "The Derma Co 10% Niacinamide Serum", price: "₹599", rating: "4.3 ★", image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=200", link: "https://www.amazon.in/s?k=The+Derma+Co+10+Niacinamide+Serum" },
-            { type: "Serum", name: "Paula's Choice 2% BHA Liquid Exfoliant", price: "₹1200", rating: "4.8 ★", image: "https://images.unsplash.com/photo-1617897903246-719242758050?w=200", link: "https://www.amazon.in/s?k=Paulas+Choice+BHA" },
             { type: "Moisturizer", name: "Pond's Super Light Gel Oil-Free", price: "₹200", rating: "4.5 ★", image: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=200", link: "https://www.amazon.in/s?k=Ponds+Super+Light+Gel" },
-            { type: "Moisturizer", name: "COSRX Advanced Snail 92 All In One Cream", price: "₹1650", rating: "4.7 ★", image: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=200", link: "https://www.amazon.in/s?k=COSRX+Snail+92+Cream" },
-            { type: "Sunscreen", name: "Re'equil Ultra Matte Dry Touch Sunscreen", price: "₹780", rating: "4.6 ★", image: "https://images.unsplash.com/photo-1612444530582-fc66183b16f7?w=200", link: "https://www.amazon.in/s?k=Reequil+Ultra+Matte+Sunscreen" },
-            { type: "Sunscreen", name: "Aqualogica Glow+ Dewy Sunscreen", price: "₹399", rating: "4.4 ★", image: "https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?w=200", link: "https://www.amazon.in/s?k=Aqualogica+Sunscreen" }
+            { type: "Sunscreen", name: "Re'equil Ultra Matte Dry Touch Sunscreen", price: "₹780", rating: "4.6 ★", image: "https://images.unsplash.com/photo-1612444530582-fc66183b16f7?w=200", link: "https://www.amazon.in/s?k=Reequil+Ultra+Matte+Sunscreen" }
         ],
         dry: [
             { type: "Cleanser", name: "Cetaphil Gentle Skin Cleanser", price: "₹333", rating: "4.7 ★", image: "https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?w=200", link: "https://www.amazon.in/s?k=Cetaphil+Gentle+Skin+Cleanser" },
-            { type: "Cleanser", name: "CeraVe Hydrating Facial Cleanser", price: "₹1400", rating: "4.8 ★", image: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=200", link: "https://www.amazon.in/s?k=CeraVe+Hydrating+Cleanser" },
-            { type: "Serum", name: "The Ordinary Hyaluronic Acid 2% + B5", price: "₹750", rating: "4.6 ★", image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=200", link: "https://www.amazon.in/s?k=The+Ordinary+Hyaluronic+Acid" },
             { type: "Serum", name: "Minimalist 2% Hyaluronic Acid", price: "₹599", rating: "4.5 ★", image: "https://images.unsplash.com/photo-1617897903246-719242758050?w=200", link: "https://www.amazon.in/s?k=Minimalist+Hyaluronic+Acid" },
             { type: "Moisturizer", name: "Dot & Key Ceramides & Hyaluronic Cream", price: "₹395", rating: "4.4 ★", image: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=200", link: "https://www.amazon.in/s?k=Dot+and+Key+Ceramides" },
             { type: "Moisturizer", name: "Bioderma Atoderm Intensive Baume", price: "₹1300", rating: "4.8 ★", image: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=200", link: "https://www.amazon.in/s?k=Bioderma+Atoderm+Baume" },
-            { type: "Treatment", name: "Laneige Lip Sleeping Mask", price: "₹1300", rating: "4.9 ★", image: "https://images.unsplash.com/photo-1608248597481-496100c8c836?w=200", link: "https://www.amazon.in/s?k=Laneige+Lip+Mask" },
             { type: "Sunscreen", name: "Isntree Hyaluronic Acid Watery Sun Gel", price: "₹1650", rating: "4.7 ★", image: "https://images.unsplash.com/photo-1612444530582-fc66183b16f7?w=200", link: "https://www.amazon.in/s?k=Isntree+Sun+Gel" }
         ],
         acne: [
             { type: "Cleanser", name: "Sebamed Clear Face Cleansing Foam", price: "₹580", rating: "4.5 ★", image: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=200", link: "https://www.amazon.in/s?k=Sebamed+Clear+Face+Foam" },
-            { type: "Cleanser", name: "Derma Co 1% Salicylic Acid Gel Wash", price: "₹299", rating: "4.3 ★", image: "https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?w=200", link: "https://www.amazon.in/s?k=Derma+Co+Salicylic+Wash" },
             { type: "Treatment", name: "COSRX Acne Pimple Master Patch", price: "₹299", rating: "4.8 ★", image: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=200", link: "https://www.amazon.in/s?k=COSRX+Acne+Pimple+Patch" },
-            { type: "Treatment", name: "Benzoyl Peroxide 2.5% Gel (Pharmacy)", price: "₹150", rating: "4.6 ★", image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=200", link: "https://www.amazon.in/s?k=Benzoyl+Peroxide+Gel" },
-            { type: "Toner", name: "Some By Mi AHA BHA PHA 30 Days Miracle", price: "₹1200", rating: "4.5 ★", image: "https://images.unsplash.com/photo-1608248597481-496100c8c836?w=200", link: "https://www.amazon.in/s?k=Some+By+Mi+Miracle+Toner" },
             { type: "Serum", name: "Axis-Y Dark Spot Correcting Glow Serum", price: "₹1500", rating: "4.7 ★", image: "https://images.unsplash.com/photo-1617897903246-719242758050?w=200", link: "https://www.amazon.in/s?k=Axis+Y+Dark+Spot+Serum" },
             { type: "Moisturizer", name: "Plum Green Tea Oil Free Moisturizer", price: "₹470", rating: "4.4 ★", image: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=200", link: "https://www.amazon.in/s?k=Plum+Green+Tea+Moisturizer" },
             { type: "Sunscreen", name: "UV Doux Silicone Sunscreen Gel", price: "₹650", rating: "4.6 ★", image: "https://images.unsplash.com/photo-1612444530582-fc66183b16f7?w=200", link: "https://www.amazon.in/s?k=UV+Doux+Sunscreen" }
@@ -237,100 +281,84 @@
             { type: "Cleanser", name: "Dermalogica Daily Microfoliant", price: "₹1500", rating: "4.7 ★", image: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=200", link: "https://www.amazon.in/s?k=Dermalogica+Microfoliant" },
             { type: "Serum", name: "Minimalist 2% Alpha Arbutin", price: "₹549", rating: "4.5 ★", image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=200", link: "https://www.amazon.in/s?k=Minimalist+Alpha+Arbutin" },
             { type: "Serum", name: "FoxTale 15% Vitamin C Serum", price: "₹595", rating: "4.3 ★", image: "https://images.unsplash.com/photo-1617897903246-719242758050?w=200", link: "https://www.amazon.in/s?k=FoxTale+Vitamin+C" },
-            { type: "Serum", name: "Beauty of Joseon Glow Deep Serum", price: "₹1400", rating: "4.8 ★", image: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=200", link: "https://www.amazon.in/s?k=Beauty+of+Joseon+Glow+Deep" },
-            { type: "Treatment", name: "The Ordinary Glycolic Acid 7% Toning Solution", price: "₹1200", rating: "4.7 ★", image: "https://images.unsplash.com/photo-1608248597481-496100c8c836?w=200", link: "https://www.amazon.in/s?k=The+Ordinary+Glycolic+Acid" },
-            { type: "Treatment", name: "Kojic Acid Cream (Kojiglo/Demelan)", price: "₹450", rating: "4.4 ★", image: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=200", link: "https://www.amazon.in/s?k=Kojic+Acid+Cream" },
             { type: "Sunscreen", name: "Blynds Emulgel SPF 40 PA+++", price: "₹450", rating: "4.6 ★", image: "https://images.unsplash.com/photo-1612444530582-fc66183b16f7?w=200", link: "https://www.amazon.in/s?k=Blynds+Sunscreen" }
         ],
         sensitive: [
-            { type: "Cleanser", name: "Bioderma Sensibio Gel Moussant", price: "₹1500", rating: "4.8 ★", image: "https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?w=200", link: "https://www.amazon.in/s?k=Bioderma+Sensibio+Gel" },
             { type: "Cleanser", name: "Simple Kind to Skin Refreshing Wash", price: "₹385", rating: "4.5 ★", image: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=200", link: "https://www.amazon.in/s?k=Simple+Refreshing+Face+Wash" },
-            { type: "Toner", name: "Klairs Supple Preparation Unscented Toner", price: "₹1400", rating: "4.9 ★", image: "https://images.unsplash.com/photo-1608248597481-496100c8c836?w=200", link: "https://www.amazon.in/s?k=Klairs+Unscented+Toner" },
             { type: "Serum", name: "Purito Centella Unscented Serum", price: "₹1500", rating: "4.7 ★", image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=200", link: "https://www.amazon.in/s?k=Purito+Centella+Serum" },
             { type: "Moisturizer", name: "Aveeno Dermexa Daily Emollient Cream", price: "₹900", rating: "4.8 ★", image: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=200", link: "https://www.amazon.in/s?k=Aveeno+Dermexa" },
-            { type: "Moisturizer", name: "Minimalist 10% Vitamin B5 Moisturizer", price: "₹349", rating: "4.4 ★", image: "https://images.unsplash.com/photo-1617897903246-719242758050?w=200", link: "https://www.amazon.in/s?k=Minimalist+Vitamin+B5" },
             { type: "Sunscreen", name: "Episoft AC Sunscreen SPF 30", price: "₹550", rating: "4.6 ★", image: "https://images.unsplash.com/photo-1612444530582-fc66183b16f7?w=200", link: "https://www.amazon.in/s?k=Episoft+AC+Sunscreen" }
         ]
     };
 
-    async function startDeepAnalysis() {
-        const name = document.getElementById("user-name").value;
-        if(!name) { alert("Please enter your name first!"); return; }
-
-        const concernType = document.getElementById("q1").value;
+    function startDeepAnalysis() {
+        // Save specific issue
+        userAnswers['specific_issue'] = document.getElementById("specific-issue").value;
+        const concernType = userAnswers['concern'] || 'oily';
         
-        // Hide Form, Show Loader
+        // Hide UI, Show Loader
         document.getElementById("quiz-wrapper").style.display = "none";
         document.getElementById("loading-overlay").style.display = "block";
-        document.getElementById("display-name").innerText = name;
+        document.getElementById("display-name").innerText = userAnswers['name'];
 
-        try {
-            // Simulated AI processing for demonstration (Replace with real API later)
-            setTimeout(() => { document.getElementById("loading-msg").innerText = "Cross-referencing 500+ dermatological compounds..."; }, 1500);
-            setTimeout(() => { document.getElementById("loading-msg").innerText = "Assembling custom routine and matching products..."; }, 3000);
+        // Simulate AI Processing
+        setTimeout(() => { document.getElementById("loading-msg").innerText = "Cross-referencing specific issues with database..."; }, 1500);
+        setTimeout(() => { document.getElementById("loading-msg").innerText = "Assembling custom routine and matching products..."; }, 3000);
+        
+        setTimeout(() => {
+            let causes = "", solutions = "", dosDonts = "", routine = "";
+            let specificNote = userAnswers['specific_issue'] ? `\n\n*Specific Issue Noted:* Your concern regarding "${userAnswers['specific_issue']}" has been factored into this analysis.` : "";
             
-            setTimeout(() => {
-                let causes = "", solutions = "", dosDonts = "", routine = "";
-                
-                if(concernType === 'acne' || concernType === 'oily') {
-                    causes = "• Overactive sebaceous glands triggered by hormonal fluctuations or diet.\n• Accumulation of dead skin cells trapping sebum in pores, leading to microcomedones.\n• Potential dehydration causing the skin to overcompensate by producing excess oil.";
-                    solutions = "• Incorporate BHA (Salicylic Acid) to deeply penetrate and unclog pores.\n• Regulate sebum production and repair the barrier using 5-10% Niacinamide.\n• Utilize lightweight, non-comedogenic hydration (gel-based) to maintain water balance.";
-                    dosDonts = "✅ DO: Double cleanse at night if wearing sunscreen/makeup.\n✅ DO: Use hydrocolloid patches on active breakouts to prevent picking.\n❌ DON'T: Over-wash your face (stick to 2 times a day maximum).\n❌ DON'T: Use harsh physical scrubs (apricot/walnut) which cause micro-tears.";
-                    routine = "🌅 AM Routine:\n1. Gentle BHA Cleanser\n2. Niacinamide Serum\n3. Lightweight Gel Moisturizer\n4. Matte/Silicone Sunscreen\n\n🌙 PM Routine:\n1. Cleanser\n2. Spot Treatment (Pimple Patch or Benzoyl Peroxide on active acne)\n3. Gel Moisturizer";
-                } else if (concernType === 'dry') {
-                    causes = "• Compromised stratum corneum (outer skin barrier) allowing transepidermal water loss.\n• Lower natural sebum production leading to a lack of protective lipids.\n• Environmental aggressors like air conditioning, low humidity, or inadequate water intake.";
-                    solutions = "• Introduce Ceramides, Peptides, and Hyaluronic Acid to bind water and rebuild the lipid barrier.\n• Switch entirely to gentle, non-foaming, hydrating cream cleansers.\n• Layer hydration (toner/essence) under thick, occlusive creams.";
-                    dosDonts = "✅ DO: Apply moisturizer on slightly damp skin to lock in hydration.\n✅ DO: Consider a humidifier in your room if the air is very dry.\n❌ DON'T: Wash your face with hot water (strips natural oils).\n❌ DON'T: Over-exfoliate with strong AHAs or BHAs.";
-                    routine = "🌅 AM Routine:\n1. Hydrating Cleanser (or just water wash)\n2. Hyaluronic Acid Serum (on damp skin)\n3. Ceramide-rich Cream\n4. Hydrating Sunscreen\n\n🌙 PM Routine:\n1. Gentle Cleanser\n2. Hydrating Toner/Essence\n3. Thick Layer of Barrier Repair Cream (slugging with Vaseline on extra dry patches)";
-                } else if (concernType === 'pigmentation') {
-                    causes = "• Post-inflammatory hyperpigmentation (PIH) left behind by old acne breakouts.\n• Melanin overproduction triggered by UV exposure without adequate protection.\n• Oxidative stress from environmental pollutants.";
-                    solutions = "• Inhibit melanin production using tyrosinase inhibitors like Alpha Arbutin or Kojic Acid.\n• Introduce Vitamin C in the morning to fight free radicals and brighten overall tone.\n• Accelerate cell turnover with gentle chemical exfoliation (Glycolic/Lactic Acid).";
-                    dosDonts = "✅ DO: Reapply sunscreen every 3 hours—this is non-negotiable for treating pigmentation.\n✅ DO: Be patient; pigmentation takes 4-12 weeks to fade visibly.\n❌ DON'T: Mix strong active ingredients (like Vitamin C and AHAs) in the same routine without building tolerance.\n❌ DON'T: Pick at scabs or pimples.";
-                    routine = "🌅 AM Routine:\n1. Gentle Cleanser\n2. Vitamin C or Alpha Arbutin Serum\n3. Moisturizer\n4. High-Protection Sunscreen (SPF 40+)\n\n🌙 PM Routine:\n1. Cleanser\n2. Exfoliating Treatment (AHA/Glycolic - 2x a week only)\n3. Repairing Moisturizer";
-                } else {
-                    causes = "• Impaired protective barrier leading to microscopic vulnerabilities in the skin.\n• Hyper-reactive immune response to common cosmetic ingredients (fragrance, essential oils).\n• Over-exfoliation or sudden changes in climate.";
-                    solutions = "• Strip routine back to absolute basics: Cleanser, Moisturizer, Sunscreen.\n• Seek out soothing, anti-inflammatory ingredients like Centella Asiatica (Cica), Panthenol (Vitamin B5), and Oat extract.\n• Eliminate all artificial fragrances, drying alcohols, and essential oils.";
-                    dosDonts = "✅ DO: Always patch-test new products on your jawline for 24 hours before full application.\n✅ DO: Stick to a minimal routine until the barrier heals.\n❌ DON'T: Use chemical exfoliants or retinoids while skin is actively red or stinging.\n❌ DON'T: Change products frequently.";
-                    routine = "🌅 AM Routine:\n1. Ultra-Gentle Cleanser\n2. Soothing Centella/B5 Serum\n3. Barrier Repair Moisturizer\n4. Mineral Sunscreen\n\n🌙 PM Routine:\n1. Gentle Cleanser\n2. Soothing Serum\n3. Heavy Calming Moisturizer";
-                }
+            if(concernType === 'acne' || concernType === 'oily') {
+                causes = "• Overactive sebaceous glands triggered by hormonal fluctuations or diet.\n• Accumulation of dead skin cells trapping sebum in pores, leading to microcomedones." + specificNote;
+                solutions = "• Incorporate BHA (Salicylic Acid) to deeply penetrate and unclog pores.\n• Regulate sebum production and repair the barrier using 5-10% Niacinamide.";
+                dosDonts = "✅ DO: Double cleanse at night if wearing sunscreen/makeup.\n✅ DO: Use hydrocolloid patches on active breakouts.\n❌ DON'T: Over-wash your face (stick to 2 times a day maximum).";
+                routine = "🌅 AM Routine:\n1. Gentle BHA Cleanser\n2. Niacinamide Serum\n3. Lightweight Gel Moisturizer\n4. Matte Sunscreen\n\n🌙 PM Routine:\n1. Cleanser\n2. Spot Treatment\n3. Gel Moisturizer";
+            } else if (concernType === 'dry') {
+                causes = "• Compromised stratum corneum allowing transepidermal water loss.\n• Lower natural sebum production leading to a lack of protective lipids." + specificNote;
+                solutions = "• Introduce Ceramides, Peptides, and Hyaluronic Acid to bind water.\n• Switch entirely to gentle, non-foaming, hydrating cream cleansers.";
+                dosDonts = "✅ DO: Apply moisturizer on slightly damp skin to lock in hydration.\n❌ DON'T: Wash your face with hot water (strips natural oils).";
+                routine = "🌅 AM Routine:\n1. Hydrating Cleanser\n2. Hyaluronic Acid Serum\n3. Ceramide-rich Cream\n4. Hydrating Sunscreen\n\n🌙 PM Routine:\n1. Gentle Cleanser\n2. Thick Barrier Repair Cream";
+            } else if (concernType === 'pigmentation') {
+                causes = "• Post-inflammatory hyperpigmentation (PIH) left behind by old acne breakouts.\n• Melanin overproduction triggered by UV exposure." + specificNote;
+                solutions = "• Inhibit melanin production using tyrosinase inhibitors like Alpha Arbutin.\n• Introduce Vitamin C in the morning to fight free radicals.";
+                dosDonts = "✅ DO: Reapply sunscreen every 3 hours—this is non-negotiable.\n❌ DON'T: Mix strong active ingredients without building tolerance.";
+                routine = "🌅 AM Routine:\n1. Gentle Cleanser\n2. Alpha Arbutin / Vit C Serum\n3. Moisturizer\n4. SPF 40+ Sunscreen\n\n🌙 PM Routine:\n1. Cleanser\n2. Exfoliating Treatment (2x a week)\n3. Repairing Moisturizer";
+            } else {
+                causes = "• Impaired protective barrier leading to microscopic vulnerabilities in the skin.\n• Hyper-reactive immune response to common cosmetic ingredients." + specificNote;
+                solutions = "• Strip routine back to absolute basics: Cleanser, Moisturizer, Sunscreen.\n• Seek out soothing ingredients like Centella Asiatica (Cica) and Panthenol.";
+                dosDonts = "✅ DO: Always patch-test new products on your jawline for 24 hours.\n❌ DON'T: Use chemical exfoliants or retinoids while skin is actively red.";
+                routine = "🌅 AM Routine:\n1. Ultra-Gentle Cleanser\n2. Soothing Centella Serum\n3. Barrier Repair Moisturizer\n4. Mineral Sunscreen\n\n🌙 PM Routine:\n1. Gentle Cleanser\n2. Heavy Calming Moisturizer";
+            }
 
-                populateDashboard(causes, solutions, dosDonts, concernType, routine);
-            }, 4500);
-        } catch (error) {
-            console.log("Error:", error);
-        }
-    }
+            document.getElementById("loading-overlay").style.display = "none";
+            document.getElementById("result-wrapper").style.display = "block";
+            
+            document.getElementById("ai-causes").innerText = causes;
+            document.getElementById("ai-solutions").innerText = solutions;
+            document.getElementById("ai-dos-donts").innerText = dosDonts;
+            document.getElementById("ai-routine").innerText = routine;
 
-    function populateDashboard(causes, solutions, dosDonts, skinType, routine) {
-        document.getElementById("loading-overlay").style.display = "none";
-        document.getElementById("result-wrapper").style.display = "block";
-        
-        document.getElementById("ai-causes").innerText = causes;
-        document.getElementById("ai-solutions").innerText = solutions;
-        document.getElementById("ai-dos-donts").innerText = dosDonts;
-        document.getElementById("ai-routine").innerText = routine;
+            // Inject Massive Carousel dynamically
+            const products = productDatabase[concernType] || productDatabase['oily'];
+            let carouselHTML = `<div class="product-carousel">`;
+            products.forEach(prod => {
+                carouselHTML += `
+                    <div class="product-card">
+                        <span class="product-category-tag">${prod.type}</span>
+                        <img class="product-img" src="${prod.image}" alt="${prod.name}">
+                        <div class="product-title">${prod.name}</div>
+                        <div class="product-meta">
+                            <span class="product-price">${prod.price}</span>
+                            <span class="product-rating">${prod.rating}</span>
+                        </div>
+                        <a href="${prod.link}" target="_blank" class="buy-btn">🛒 Buy Now</a>
+                    </div>`;
+            });
+            carouselHTML += `</div>`;
+            document.getElementById("recommendations-output").innerHTML = carouselHTML;
 
-        // Inject Massive Carousel dynamically based on selected skin type
-        const products = productDatabase[skinType] || productDatabase['oily'];
-        let carouselHTML = `<div class="product-carousel">`;
-        
-        products.forEach(prod => {
-            // Adding a Category Tag (e.g., 'Cleanser', 'Serum') on top of each card
-            carouselHTML += `
-                <div class="product-card">
-                    <span class="product-category-tag">${prod.type}</span>
-                    <img class="product-img" src="${prod.image}" alt="${prod.name}">
-                    <div class="product-title">${prod.name}</div>
-                    <div class="product-meta">
-                        <span class="product-price">${prod.price}</span>
-                        <span class="product-rating">${prod.rating}</span>
-                    </div>
-                    <a href="${prod.link}" target="_blank" class="buy-btn">🛒 Buy Now</a>
-                </div>`;
-        });
-        
-        carouselHTML += `</div>`;
-        document.getElementById("recommendations-output").innerHTML = carouselHTML;
+        }, 4500);
     }
 </script>
 
